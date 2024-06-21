@@ -1,0 +1,90 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    text-align: center;
+    background-color: #e6f7ff;
+    color: #004080;
+}
+
+h1, h2 {
+    color: #0059b3;
+}
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #cce6ff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+input[type="number"], select {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    border: 1px solid #004080;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #0059b3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #004080;
+}
+
+#result, #fileResult {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #003366;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap; /* Permettre le retour à la ligne */
+}
+
+.logo {
+    margin-bottom: 20px;
+    width: 15%; /* Réduit la taille du logo */
+}
+
+.separator {
+    width: 2px;
+    background-color: #004080;
+    height: 100%;
+    margin: 0 20px;
+}
+
+.separator-line {
+    height: 2px;
+    background-color: #004080;
+    width: 100%;
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Disposition verticale pour les petits écrans */
+        align-items: center;
+    }
+
+    .separator {
+        width: 80%;
+        height: 2px;
+    }
+
+    .logo {
+        width: 40%; /* Taille du logo pour les petits écrans */
+    }
+}

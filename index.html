@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcul de Mappe Cadastrale</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="Logo-Microtopographie.ico" type="image/x-icon">
+</head>
+<body>
+    <a href="index.html"><img src="logo.png" alt="Logo" class="logo"></a>
+    <h1>Calcul de Mappe Cadastrale</h1>
+    <div class="container">
+        <div>
+            <h2>Saisir les coordonnées</h2>
+            <form id="mappeForm">
+                <label for="x">Valeur de x :</label>
+                <input type="number" id="x" name="x" required><br><br>
+
+                <label for="y">Valeur de y :</label>
+                <input type="number" id="y" name="y" required><br><br>
+
+                <label for="sc">Échelle :</label>
+                <select id="sc" name="sc" required>
+                    <option value="20000">20000</option>
+                    <option value="10000">10000</option>
+                    <option value="5000">5000</option>
+                    <option value="2000">2000</option>
+                    <option value="1000">1000</option>
+                    <option value="500">500</option>
+                    <option value="200">200</option>
+                    <option value="100">100</option>
+                </select><br><br>
+
+                <button type="button" onclick="calculateMappe()">Calculer la Mappe</button>
+            </form>
+
+            <div id="result"></div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div>
+            <h2>Lire un fichier des coordonnées</h2>
+            <form id="fileForm" enctype="multipart/form-data">
+                <input type="file" id="fileInput" name="file" accept=".txt" required><br><br>
+                <button type="button" onclick="processFile()">Traitement du fichier</button>
+            </form>
+            <div id="fileResult"></div>
+        </div>
+    </div>
+
+    <script>
+        async function calculateMappe() {
+            let x = document.getElementById("x").value;
+            let y = document.getElementById("y").value;
+            let sc = document.getElementById("sc").value;
+
+            if (x === "") {
+                alert("Veuillez saisir la valeur de X.");
+                return;
+            }
+            if (y === "") {
+                alert("Veuillez saisir la valeur de Y.");
+                return;
+            }
+            if (sc === "") {
+                alert("Veuillez sélectionner une échelle.");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("x", x);
+            formData.append("y", y);
+            formData.append("sc", sc);
+
+            let response = await fetch("calculate.php", {
+                method: "POST",
+                body: formData
+            });
+
+            let result = await response.json();
+            document.getElementById("result").innerText = "Résultat de la mappe pour échelle " + sc + " est : " + result.result;
+        }
+
+        async function processFile() {
+            let fileInput = document.getElementById("fileInput");
+            let file = fileInput.files[0];
+
+            if (!file) {
+                alert("Veuillez sélectionner un fichier.");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("file", file);
+
+            let response = await fetch("process_file.php", {
+                method: "POST",
+                body: formData
+            });
+
+            let result = await response.blob();
+            let url = window.URL.createObjectURL(result);
+            let a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'resultats_' + file.name.replace('.txt', '') + '.zip';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.getElementById("fileResult").innerText = "Le fichier a été traité avec succès. Téléchargez les résultats ci-dessous.";
+        }
+    </script>
+</body>
+</html>
